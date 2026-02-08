@@ -1,0 +1,77 @@
+# Joseph Murillo
+# Text-Based Game
+
+
+def main():
+
+    # Displays instructions, set current_room starting room in game and create empty list for inventory.
+
+    player_instructions()
+    item_inventory = []
+    current_room = "Main Hall"
+
+    # The dictionary links a room to other rooms.
+
+    rooms = {
+        "Main Hall": {
+            "South": "Kitchen",
+            "North": "Medical Bay",
+            "East": "Maintenance Cabin",
+            "West": "Living Quarters",
+        },
+        "Kitchen": {"North": "Main Hall", "East": "Armory", "Item": "Smoothie"},
+        "Armory": {"West": "Kitchen", "Item": "Gun"},
+        "Medical Bay": {
+            "South": "Main Hall",
+            "East": "Research Lab",
+            "Item": "Vaccine",
+        },
+        "Research Lab": {"West": "Medical Bay", "Item": "Acid"},
+        "Maintenance Cabin": {
+            "West": "Main Hall",
+            "North": "Cargo Bay",
+            "Item": "VR Goggles",
+        },
+        "Cargo Bay": {"South": "Maintenance Cabin"},
+        "Living Quarters": {"East": "Main Hall", "Item": "Spacesuit"},
+    }
+
+    while current_room != "Cargo Bay":
+        show_status(current_room, item_inventory)
+        direction = input().strip().title()
+
+        if direction in rooms[current_room].keys():
+            current_room = rooms[current_room][direction]
+
+            if "Item" in rooms[current_room].keys():
+
+                if rooms[current_room]["Item"] not in item_inventory:
+                    item_inventory.append(rooms[current_room]["Item"])
+
+        elif direction not in rooms[current_room].keys():
+            print("Invalid direction")
+
+    if len(item_inventory) == 6:
+        print("You defeated the alien!!!")
+        print("You win!!!")
+    else:
+        print("You have reached the alien unprepared!!!")
+        print("You lose.")
+
+
+# Instructions meant to introduce player to game and teach them how to play
+def player_instructions():
+    print("Welcome to the Alien Game!!!")
+    print("Collect 6 items before reaching final boss to win!!!")
+    print("To play, choose a direction:")
+    print("North, South, East, West")
+
+
+# passed current_room and item_inventory as arguments to allow the function to be called within main()
+def show_status(current_room, item_inventory):
+    print("You are in the", current_room)
+    print("Inventory:", item_inventory)
+
+
+if __name__ == "__main__":
+    main()
